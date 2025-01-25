@@ -32,7 +32,7 @@ public class FtpService(FTPSearchDbContext dbContext,
             .Where(file => file.Type == FtpObjectType.File)
             .Select(file => new FileResponse(
                 file.Name, 
-                file.FullName, 
+                 Path.GetDirectoryName(file.FullName!)!.TrimStart('/'), 
                 $"{_ftpConfiguration.Host}/{file.FullName.TrimStart('/')}"
             ))
             .ToList();
