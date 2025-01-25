@@ -1,0 +1,6 @@
+@FTPSearch.API_HostAddress = http://localhost:5057
+
+GET {{FTPSearch.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
