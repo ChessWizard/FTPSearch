@@ -3,17 +3,20 @@ using System;
 using FTPSearch.API.Infrastructure.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 #nullable disable
 
-namespace FTPSearch.API.Infrastructure.Migrations
+namespace FTPSearch.API.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(FTPSearchDbContext))]
-    partial class FTPSearchDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250126120831_File_Entity_Configurations")]
+    partial class File_Entity_Configurations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -42,19 +45,26 @@ namespace FTPSearch.API.Infrastructure.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(255)
+                        .HasColumnType("character varying(255)");
 
                     b.Property<string>("Path")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(1024)
+                        .HasColumnType("character varying(1024)");
 
                     b.Property<string>("Url")
                         .IsRequired()
-                        .HasColumnType("text");
+                        .HasMaxLength(2048)
+                        .HasColumnType("character varying(2048)");
 
                     b.HasKey("Id");
 
-                    b.ToTable("Files");
+                    b.HasIndex("Name", "Path")
+                        .IsUnique()
+                        .HasDatabaseName("IX_FileEntity_Name_Path");
+
+                    b.ToTable("Files", (string)null);
                 });
 #pragma warning restore 612, 618
         }

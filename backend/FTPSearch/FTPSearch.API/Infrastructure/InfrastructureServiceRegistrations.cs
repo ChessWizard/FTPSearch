@@ -7,5 +7,6 @@ public static partial class InfrastructureServiceRegistrations
         => services.AddFTPSearchDbContext(configuration)
             .AddConfigurations(configuration)
             .AddServices()
-            .AddLibraries();
+            .AddLibraries()
+            .AddInterceptors();
 }

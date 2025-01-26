@@ -3,6 +3,7 @@ using FluentValidation;
 using FTPSearch.API.Application.Services;
 using FTPSearch.API.Infrastructure.Configurations;
 using FTPSearch.API.Infrastructure.Data.Context;
+using FTPSearch.API.Infrastructure.Data.Interceptors;
 using FTPSearch.API.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
@@ -13,9 +14,11 @@ public static partial class InfrastructureServiceRegistrations
 {
     private static IServiceCollection AddFTPSearchDbContext(this IServiceCollection services, 
         IConfiguration configuration)
-        => services.AddDbContext<FTPSearchDbContext>(options =>
-    {
-        options.UseNpgsql(configuration.GetConnectionString("DatabaseConnection"));
+        => services.AddDbContext<FTPSearchDbContext>((serviceProvider, options) =>
+        {
+            var auditInterceptor = serviceProvider.GetRequiredService<AuditEntitySaveChangeInterceptor>();
+            options.UseNpgsql(configuration.GetConnectionString("DatabaseConnection"))
+                .AddInterceptors(auditInterceptor);
     });
     
     private static IServiceCollection AddConfigurations(this IServiceCollection services, 
@@ -48,6 +51,9 @@ public static partial class InfrastructureServiceRegistrations
 
     private static IServiceCollection AddCarterLibrary(this IServiceCollection services)
         => services.AddCarter();
+
+    private static IServiceCollection AddInterceptors(this IServiceCollection services)
+        => services.AddScoped<AuditEntitySaveChangeInterceptor>();
 
     public static void ConfigureLibraries(this WebApplication app)
     {

@@ -35,7 +35,6 @@
 
     <ItemGroup>
       <Folder Include="Application\Request\" />
-      <Folder Include="Infrastructure\Data\" />
     </ItemGroup>
 
     <ItemGroup>
@@ -44,6 +43,12 @@
       </Compile>
       <Compile Update="Application\Results\Messages\BusinessMessageConstants.Ftp.cs">
         <DependentUpon>BusinessMessageConstants.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Application\Results\Messages\BusinessMessageConstants.File.cs">
+        <DependentUpon>BusinessMessageConstants.cs</DependentUpon>
+      </Compile>
+      <Compile Update="Infrastructure\Data\Interceptors\AuditEntitySaveChangeInterceptor.Helper.cs">
+        <DependentUpon>AuditEntitySaveChangeInterceptor.cs</DependentUpon>
       </Compile>
     </ItemGroup>
 

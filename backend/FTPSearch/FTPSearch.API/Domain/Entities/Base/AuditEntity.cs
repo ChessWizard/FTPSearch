@@ -11,4 +11,6 @@ public abstract class AuditEntity<T> : IAuditEntity<T>
     public virtual DateTimeOffset? ModifiedDate { get; set; }
     
     public virtual DateTimeOffset? DeletedDate { get; set; }
+    
+    public virtual bool IsDeleted { get; set; }
 }
