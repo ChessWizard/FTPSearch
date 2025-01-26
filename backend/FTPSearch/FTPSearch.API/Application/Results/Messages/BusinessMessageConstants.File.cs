@@ -17,6 +17,12 @@ public static partial class BusinessMessageConstants
                 Code: "FLE20001",
                 HttpStatus: StatusCodes.Status200OK
             );
+            
+            public static readonly BusinessMessage FoundByDirectory = new(
+                Message: "Aradığınız dizindeki dosyalar bulundu!",
+                Code: "FLE20002",
+                HttpStatus: StatusCodes.Status200OK
+            );
 
             #endregion
         }
@@ -34,6 +40,16 @@ public static partial class BusinessMessageConstants
                 Message: "FTP üzerinden gelen tüm dosya bilgileri halihazırda veritabanında kayıtlı.",
                 Code: "FLE40001",
                 HttpStatus: StatusCodes.Status400BadRequest
+            );
+            
+            #endregion
+            
+            #region Status Code - 404
+            
+            public static readonly BusinessMessage NotFoundByDirectory = new(
+                Message: "Aradığınız dizinde herhangi bir dosya bulunamadı!",
+                Code: "FLE40401",
+                HttpStatus: StatusCodes.Status404NotFound
             );
             
             #endregion

@@ -12,6 +12,9 @@ public class FileEntityTypeConfiguration : AuditEntityTypeConfiguration<FileEnti
         
         builder.HasKey(file => file.Id);
         
+        builder.HasIndex(e => e.Path)
+            .HasDatabaseName("IX_FileEntity_Path");
+        
         builder.HasIndex(e => new { e.Name, e.Path })
             .IsUnique()
             .HasDatabaseName("IX_FileEntity_Name_Path");
@@ -20,13 +23,16 @@ public class FileEntityTypeConfiguration : AuditEntityTypeConfiguration<FileEnti
             .IsRequired()
             .HasMaxLength(255);
         
-        builder.Property(e => e.Path)
+        builder.Property(file => file.Path)
             .IsRequired()
             .HasMaxLength(1024);
 
-        builder.Property(e => e.Url)
+        builder.Property(file => file.Url)
             .IsRequired()
             .HasMaxLength(2048);
+        
+        builder.Property(file => file.FileMetaType)
+            .IsRequired();
         
         base.Configure(builder);
     }

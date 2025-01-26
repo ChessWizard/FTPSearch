@@ -9,7 +9,7 @@ using Microsoft.Extensions.Options;
 
 namespace FTPSearch.API.Infrastructure.Services;
 
-public class FtpService(FTPSearchDbContext dbContext,
+public partial class FtpService(FTPSearchDbContext dbContext,
     IOptions<FtpConfiguration> ftpConfiguration) : IFtpService
 {
     private readonly FtpConfiguration _ftpConfiguration = ftpConfiguration.Value;
@@ -29,11 +29,11 @@ public class FtpService(FTPSearchDbContext dbContext,
             return Result<List<FileResponse>>.Error(BusinessMessageConstants.Error.Ftp.NotFound);
 
         var fileResponses = filesWithSubDirectories
-            .Where(file => file.Type == FtpObjectType.File)
             .Select(file => new FileResponse(
                 file.Name, 
                  Path.GetDirectoryName(file.FullName!)!.TrimStart('/'), 
-                $"{_ftpConfiguration.Host}/{file.FullName.TrimStart('/')}"
+                $"{_ftpConfiguration.Host}/{file.FullName.TrimStart('/')}",
+                GetFileMetaType(file.Type)
             ))
             .ToList();
         

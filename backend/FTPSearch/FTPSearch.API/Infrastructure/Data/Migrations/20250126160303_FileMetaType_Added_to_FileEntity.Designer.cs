@@ -3,6 +3,7 @@ using System;
 using FTPSearch.API.Infrastructure.Data.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace FTPSearch.API.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(FTPSearchDbContext))]
-    partial class FTPSearchDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250126160303_FileMetaType_Added_to_FileEntity")]
+    partial class FileMetaType_Added_to_FileEntity
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -59,9 +62,6 @@ namespace FTPSearch.API.Infrastructure.Data.Migrations
                         .HasColumnType("character varying(2048)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("Path")
-                        .HasDatabaseName("IX_FileEntity_Path");
 
                     b.HasIndex("Name", "Path")
                         .IsUnique()

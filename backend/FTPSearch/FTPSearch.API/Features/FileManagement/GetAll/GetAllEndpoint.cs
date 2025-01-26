@@ -8,7 +8,7 @@ public class GetAllEndpoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
-        app.MapGet(pattern: "/FileManagements",
+        app.MapGet(pattern: "/FileManagements/All",
                 handler: async (ISender sender) =>
                 {
                     var result = await sender.Send(new GetAllQuery());

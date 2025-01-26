@@ -50,6 +50,9 @@
       <Compile Update="Infrastructure\Data\Interceptors\AuditEntitySaveChangeInterceptor.Helper.cs">
         <DependentUpon>AuditEntitySaveChangeInterceptor.cs</DependentUpon>
       </Compile>
+      <Compile Update="Infrastructure\Services\FtpService.Helper.cs">
+        <DependentUpon>FtpService.cs</DependentUpon>
+      </Compile>
     </ItemGroup>
 
 </Project>
