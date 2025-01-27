@@ -60,6 +60,12 @@ namespace FTPSearch.API.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Name")
+                        .HasDatabaseName("IX_FileEntity_Name_GIN")
+                        .HasAnnotation("Npgsql:TsVectorConfig", "english");
+
+                    NpgsqlIndexBuilderExtensions.HasMethod(b.HasIndex("Name"), "GIN");
+
                     b.HasIndex("Path")
                         .HasDatabaseName("IX_FileEntity_Path");
 
@@ -68,6 +74,8 @@ namespace FTPSearch.API.Infrastructure.Data.Migrations
                         .HasDatabaseName("IX_FileEntity_Name_Path");
 
                     b.ToTable("Files", (string)null);
+
+                    b.ToSqlQuery("\n        CREATE EXTENSION IF NOT EXISTS pg_trgm;\n        CREATE INDEX IX_FileEntity_Name_Trigram\n        ON Files\n        USING gin (Name gin_trgm_ops);\n    ");
                 });
 #pragma warning restore 612, 618
         }

@@ -33,6 +33,11 @@ public class FileEntityTypeConfiguration : AuditEntityTypeConfiguration<FileEnti
         
         builder.Property(file => file.FileMetaType)
             .IsRequired();
+
+        builder.HasIndex(file => file.Name)
+            .HasDatabaseName("IX_FileEntity_Name_GIN")
+            .HasMethod("GIN")
+            .HasAnnotation("Npgsql:TsVectorConfig", "english");
         
         base.Configure(builder);
     }
