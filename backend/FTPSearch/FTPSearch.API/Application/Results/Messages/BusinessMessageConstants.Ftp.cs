@@ -17,6 +17,12 @@ public static partial class BusinessMessageConstants
                 Code: "FTP20001",
                 HttpStatus: StatusCodes.Status200OK
             );
+            
+            public static readonly BusinessMessage Added = new(
+                Message: "FTP üzerinde dosya oluşturma işlemi başarılı!",
+                Code: "FTP20002",
+                HttpStatus: StatusCodes.Status200OK
+            );
 
             #endregion
         }

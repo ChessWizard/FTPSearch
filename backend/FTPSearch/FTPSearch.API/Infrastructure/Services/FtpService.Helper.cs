@@ -13,4 +13,28 @@ public partial class FtpService
             FtpObjectType.Link => FileMetaType.Link,
             _ => FileMetaType.File
         };
+
+    private static async Task<List<string>> CreateDirectoriesAsync(string directory,
+        AsyncFtpClient ftpClient,
+        CancellationToken cancellationToken)
+    {
+        List<string> createdDirectories = new();
+        var directories = directory.Split(new[] {'/'}, StringSplitOptions.RemoveEmptyEntries);
+        string currentPath = "";
+
+        foreach (var directoryName in directories)
+        {
+            currentPath = string.IsNullOrEmpty(currentPath) ? directoryName : $"{currentPath}/{directoryName}";
+
+            var isExistDirectory = await ftpClient.DirectoryExists(currentPath, cancellationToken);
+            if (isExistDirectory) continue;
+
+            var isDirectoryCreated = await ftpClient.CreateDirectory(currentPath, cancellationToken);
+            if (!isDirectoryCreated) continue;
+
+            createdDirectories.Add(currentPath);
+        }
+
+        return createdDirectories;
+    }
 }

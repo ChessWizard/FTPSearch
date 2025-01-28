@@ -4,13 +4,11 @@ using FTPSearch.API.Application.Results;
 using FTPSearch.API.Application.Results.Messages;
 using FTPSearch.API.Application.Services;
 using FTPSearch.API.Infrastructure.Configurations;
-using FTPSearch.API.Infrastructure.Data.Context;
 using Microsoft.Extensions.Options;
 
 namespace FTPSearch.API.Infrastructure.Services;
 
-public partial class FtpService(FTPSearchDbContext dbContext,
-    IOptions<FtpConfiguration> ftpConfiguration) : IFtpService
+public partial class FtpService(IOptions<FtpConfiguration> ftpConfiguration) : IFtpService
 {
     private readonly FtpConfiguration _ftpConfiguration = ftpConfiguration.Value;
 
@@ -40,9 +38,40 @@ public partial class FtpService(FTPSearchDbContext dbContext,
         return Result<List<FileResponse>>.Success(fileResponses, BusinessMessageConstants.Success.Ftp.AllFound);
     }
 
-    public Task<Result<List<FileResponse>>> GetAllRelatedGivenDirectory(string path, 
+    public async Task<Result<(FtpStatus FtpStatus, List<string> Directories)>> AddFileAsync(IFormFile file, 
+        string directory,
         CancellationToken cancellationToken)
     {
-        return null;
+        await using AsyncFtpClient ftpClient = new(_ftpConfiguration.Host, 
+            _ftpConfiguration.Username,
+            _ftpConfiguration.Password,
+            _ftpConfiguration.Port);
+
+        await ftpClient.Connect(cancellationToken);
+        
+        var createdDirectories = await CreateDirectoriesAsync(directory, ftpClient, cancellationToken);
+
+        var onUploadFilePath = $"{directory}/{file.FileName}";      
+        await using var fileStream = file.OpenReadStream();
+        var uploadStatus = await ftpClient.UploadStream(fileStream, 
+            onUploadFilePath, 
+            token: cancellationToken);
+        
+        return Result<(FtpStatus FtpStatus, List<string> Directories)>.Success((uploadStatus, createdDirectories), BusinessMessageConstants.Success.Ftp.Added);
+    }
+
+    public async Task<Result<List<string>>> AddDirectoriesAsync(string directory, 
+        CancellationToken cancellationToken)
+    {
+        await using AsyncFtpClient ftpClient = new(_ftpConfiguration.Host, 
+            _ftpConfiguration.Username,
+            _ftpConfiguration.Password,
+            _ftpConfiguration.Port);
+
+        await ftpClient.Connect(cancellationToken);
+        
+        var createdDirectories = await CreateDirectoriesAsync(directory, ftpClient, cancellationToken);
+        
+        return Result<List<string>>.Success(createdDirectories, BusinessMessageConstants.Success.Ftp.Added);
     }
 }

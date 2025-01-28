@@ -23,6 +23,12 @@ public static partial class BusinessMessageConstants
                 Code: "FLE20002",
                 HttpStatus: StatusCodes.Status200OK
             );
+            
+            public static readonly BusinessMessage AddedFtpAndDatabase = new(
+                Message: "Eklemek istediğiniz dosya/dosyalar eklendi!",
+                Code: "FLE20003",
+                HttpStatus: StatusCodes.Status200OK
+            );
 
             #endregion
         }

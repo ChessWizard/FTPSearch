@@ -22,14 +22,11 @@ public class TransferFromFtpToDatabaseCommandHandler(IFtpService ftpService,
         
         var fileEntities = filesFromFtpResult.Data.Adapt<List<FileEntity>>();
 
+        var allFiles = await dbContext.Files
+            .ToListAsync(cancellationToken);
+        
         // TODO: Sorgu performanslı hale getirilmeli
-        var existingFiles = (await dbContext.Files
-            .Select(file => new
-            {
-                file.Name,
-                file.Path
-            })
-            .ToListAsync(cancellationToken))
+        var existingFiles = allFiles
             .Where(file => fileEntities.Any(fileEntity => fileEntity.Name == file.Name))
             .ToList();
 
@@ -37,12 +34,20 @@ public class TransferFromFtpToDatabaseCommandHandler(IFtpService ftpService,
             .Where(fe => !existingFiles
                 .Any(ef => ef.Name == fe.Name && ef.Path == fe.Path))
             .ToList();
-
-        if (newFiles.Count == 0)
-            return Result<Unit>.Error(BusinessMessageConstants.Error.File.FtpFilesAlreadyExistOnDatabase);
         
         dbContext.Files
             .AddRange(newFiles);
+        
+        var removalFiles = allFiles
+            .Where(file => !fileEntities.Any(ftpFile => ftpFile.Name == file.Name &&
+                                                        ftpFile.Path == file.Path))
+            .ToList();
+        
+        dbContext.Files
+            .RemoveRange(removalFiles);
+
+        if (newFiles.Count == 0 && existingFiles.Count == 0)
+            return Result<Unit>.Error(BusinessMessageConstants.Error.File.FtpFilesAlreadyExistOnDatabase);
          
         var result = await dbContext.SaveChangesAsync(cancellationToken);
 

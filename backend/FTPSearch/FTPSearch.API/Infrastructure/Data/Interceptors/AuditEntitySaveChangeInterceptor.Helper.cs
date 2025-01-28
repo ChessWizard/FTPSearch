@@ -24,10 +24,10 @@ public partial class AuditEntitySaveChangeInterceptor
                 case EntityState.Added:
                     auditEntity.CreatedDate = currentTime;
                     break;
-                case EntityState.Deleted:
+                case EntityState.Modified:
                     auditEntity.ModifiedDate = currentTime;
                     break;
-                case EntityState.Modified:
+                case EntityState.Deleted:
                     entry.State = EntityState.Modified;
                     auditEntity.DeletedDate = currentTime;
                     auditEntity.IsDeleted = true;
