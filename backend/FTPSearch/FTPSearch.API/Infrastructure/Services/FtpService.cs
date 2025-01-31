@@ -74,4 +74,30 @@ public partial class FtpService(IOptions<FtpConfiguration> ftpConfiguration) : I
         
         return Result<List<string>>.Success(createdDirectories, BusinessMessageConstants.Success.Ftp.Added);
     }
+
+    public async Task<Result<FtpStatus>> DeleteFileAsync(string filePath,
+        CancellationToken cancellationToken)
+    {
+        await using AsyncFtpClient ftpClient = new(_ftpConfiguration.Host, 
+            _ftpConfiguration.Username,
+            _ftpConfiguration.Password,
+            _ftpConfiguration.Port);
+
+        await ftpClient.Connect(cancellationToken);
+
+        var isExistFile = await ftpClient.FileExists(filePath, cancellationToken);
+        if(!isExistFile)
+            return Result<FtpStatus>.Error(BusinessMessageConstants.Error.Ftp.NotFound);
+        
+        try
+        {
+            await ftpClient.DeleteFile(filePath, cancellationToken);
+        }
+        catch (Exception)
+        {
+            return Result<FtpStatus>.Error(BusinessMessageConstants.Error.Ftp.RemoveFailed);
+        }
+        
+        return Result<FtpStatus>.Success(FtpStatus.Success, BusinessMessageConstants.Success.Ftp.Removed);
+    }
 }

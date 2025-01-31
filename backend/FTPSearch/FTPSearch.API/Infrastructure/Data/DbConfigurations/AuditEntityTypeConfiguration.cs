@@ -14,5 +14,7 @@ public abstract class AuditEntityTypeConfiguration<T>
         builder.Property(u => u.ModifiedDate);
         builder.Property(u => u.DeletedDate);
         builder.Property(u => u.IsDeleted);
+        
+        builder.HasQueryFilter(u => !u.IsDeleted);
     }
 }

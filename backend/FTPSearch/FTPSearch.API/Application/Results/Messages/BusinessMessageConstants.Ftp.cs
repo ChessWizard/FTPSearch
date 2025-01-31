@@ -23,6 +23,12 @@ public static partial class BusinessMessageConstants
                 Code: "FTP20002",
                 HttpStatus: StatusCodes.Status200OK
             );
+            
+            public static readonly BusinessMessage Removed = new(
+                Message: "FTP üzerinde dosya silme işlemi başarılı!",
+                Code: "FTP20003",
+                HttpStatus: StatusCodes.Status200OK
+            );
 
             #endregion
         }
@@ -40,6 +46,18 @@ public static partial class BusinessMessageConstants
                 Message: "FTP üzerinde herhangi bir dosya bulunamadı.",
                 Code: "FTP40401",
                 HttpStatus: StatusCodes.Status404NotFound
+            );
+            
+            #endregion
+            
+            // 5xx Status Codes
+            
+            #region Status Code - 500
+            
+            public static readonly BusinessMessage RemoveFailed = new(
+                Message: "FTP üzerinde dosya silinmeye çalışılırken bir hata meydana geldi.",
+                Code: "FTP50001",
+                HttpStatus: StatusCodes.Status500InternalServerError
             );
             
             #endregion

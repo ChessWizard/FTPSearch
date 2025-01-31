@@ -29,6 +29,12 @@ public static partial class BusinessMessageConstants
                 Code: "FLE20003",
                 HttpStatus: StatusCodes.Status200OK
             );
+            
+            public static readonly BusinessMessage RemovedFtpAndDatabase = new(
+                Message: "Silmek istediğiniz dosya/dosyalar silindi!",
+                Code: "FLE20004",
+                HttpStatus: StatusCodes.Status200OK
+            );
 
             #endregion
         }
@@ -58,6 +64,12 @@ public static partial class BusinessMessageConstants
                 HttpStatus: StatusCodes.Status404NotFound
             );
             
+            public static readonly BusinessMessage NotFoundOnRemove = new(
+                Message: "Silmek üzere aradığınız dosya bulunamadı!",
+                Code: "FLE40402",
+                HttpStatus: StatusCodes.Status404NotFound
+            );
+            
             #endregion
             
             // 5xx Status Codes
@@ -68,6 +80,12 @@ public static partial class BusinessMessageConstants
                 Message: "FTP üzerinden gelen dosya bilgilerinin veritabanına aktarım işlemi yapılması sırasında " +
                          "bir hata meydana geldi!",
                 Code: "FLE50001",
+                HttpStatus: StatusCodes.Status500InternalServerError
+            );
+            
+            public static readonly BusinessMessage RemovedFtpAndDatabaseFailed = new(
+                Message: "Silmek istediğiniz dosya/dosyalar silinirken bir hata meydana geldi!",
+                Code: "FLE50002",
                 HttpStatus: StatusCodes.Status500InternalServerError
             );
             

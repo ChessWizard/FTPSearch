@@ -15,4 +15,7 @@ public interface IFtpService
     
     Task<Result<List<string>>> AddDirectoriesAsync(string directory, 
         CancellationToken cancellationToken);
+
+    Task<Result<FtpStatus>> DeleteFileAsync(string filePath,
+        CancellationToken cancellationToken);
 }
