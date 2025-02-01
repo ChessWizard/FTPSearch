@@ -27,6 +27,8 @@ public class AddFtpAndDatabaseEndpoint : ICarterModule
             .WithTags("FileManagements")
             .WithSummary("Add Files to Ftp and Database Flow")
             .WithDescription("Add files to FTP and save details into a database.")
+            .Produces(StatusCodes.Status404NotFound)
+            .Produces(StatusCodes.Status500InternalServerError)
             .Produces(StatusCodes.Status200OK);
     }
 }

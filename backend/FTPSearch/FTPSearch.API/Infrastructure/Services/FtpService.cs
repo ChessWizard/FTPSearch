@@ -125,4 +125,25 @@ public partial class FtpService(IOptions<FtpConfiguration> ftpConfiguration) : I
         
         return Result<FtpStatus>.Success(FtpStatus.Success, BusinessMessageConstants.Success.Ftp.RemovedDirectory);
     }
+
+    public async Task<Result<MemoryStream>> DownloadFileAsync(string filePath, CancellationToken cancellationToken)
+    {
+        await using AsyncFtpClient ftpClient = new(_ftpConfiguration.Host, 
+            _ftpConfiguration.Username,
+            _ftpConfiguration.Password,
+            _ftpConfiguration.Port);
+
+        await ftpClient.Connect(cancellationToken);
+
+        var isExistFile = await ftpClient.FileExists(filePath, cancellationToken);
+        if(!isExistFile)
+            return Result<MemoryStream>.Error(BusinessMessageConstants.Error.Ftp.NotFound);
+        
+        MemoryStream memoryStream = new();
+        
+        await ftpClient.DownloadStream(memoryStream, filePath, token: cancellationToken);
+        
+        memoryStream.Position = 0;
+        return Result<MemoryStream>.Success(memoryStream, BusinessMessageConstants.Success.Ftp.Downloaded);
+    }
 }

@@ -24,6 +24,8 @@ public class RemoveFtpAndDatabaseEndpoint : ICarterModule
             .WithTags("FileManagements")
             .WithSummary("Remove Files from Ftp and Database Flow")
             .WithDescription("Remove files from FTP and soft delete on database.")
+            .Produces(StatusCodes.Status404NotFound)
+            .Produces(StatusCodes.Status500InternalServerError)
             .Produces(StatusCodes.Status200OK);
     }
 }

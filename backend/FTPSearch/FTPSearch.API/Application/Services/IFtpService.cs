@@ -21,4 +21,7 @@ public interface IFtpService
     
     Task<Result<FtpStatus>> DeleteDirectoryAsync(string directory,
         CancellationToken cancellationToken);
+    
+    Task<Result<MemoryStream>> DownloadFileAsync(string filePath,
+        CancellationToken cancellationToken);
 }
