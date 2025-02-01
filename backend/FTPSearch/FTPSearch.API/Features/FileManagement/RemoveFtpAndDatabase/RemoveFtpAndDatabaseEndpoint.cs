@@ -1,12 +1,14 @@
 using Carter;
 using FTPSearch.API.Application.Extensions;
+using FTPSearch.API.Domain.Enums;
 using Mapster;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
 namespace FTPSearch.API.Features.FileManagement.RemoveFtpAndDatabase;
 
-public record RemoveFtpAndDatabaseRequest(Guid Id);
+public record RemoveFtpAndDatabaseRequest(Guid Id,
+    FileMetaType FileMetaType);
 
 public class RemoveFtpAndDatabaseEndpoint : ICarterModule
 {

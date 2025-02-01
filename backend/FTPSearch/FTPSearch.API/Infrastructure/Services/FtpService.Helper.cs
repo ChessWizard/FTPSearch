@@ -19,7 +19,7 @@ public partial class FtpService
         CancellationToken cancellationToken)
     {
         List<string> createdDirectories = new();
-        var directories = directory.Split(new[] {'/'}, StringSplitOptions.RemoveEmptyEntries);
+        var directories = directory.Split(['/'], StringSplitOptions.RemoveEmptyEntries);
         string currentPath = "";
 
         foreach (var directoryName in directories)
@@ -30,7 +30,7 @@ public partial class FtpService
             if (isExistDirectory) continue;
 
             var isDirectoryCreated = await ftpClient.CreateDirectory(currentPath, cancellationToken);
-            if (!isDirectoryCreated) continue;
+            if (!isDirectoryCreated) break;
 
             createdDirectories.Add(currentPath);
         }

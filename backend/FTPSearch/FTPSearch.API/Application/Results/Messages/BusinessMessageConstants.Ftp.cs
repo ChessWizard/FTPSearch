@@ -29,6 +29,12 @@ public static partial class BusinessMessageConstants
                 Code: "FTP20003",
                 HttpStatus: StatusCodes.Status200OK
             );
+            
+            public static readonly BusinessMessage RemovedDirectory = new(
+                Message: "FTP üzerinde dosya yolu silme işlemi başarılı!",
+                Code: "FTP20004",
+                HttpStatus: StatusCodes.Status200OK
+            );
 
             #endregion
         }
@@ -48,6 +54,12 @@ public static partial class BusinessMessageConstants
                 HttpStatus: StatusCodes.Status404NotFound
             );
             
+            public static readonly BusinessMessage NotFoundDirectory = new(
+                Message: "FTP üzerinde verilen dosya yolu bulunamadı.",
+                Code: "FTP40402",
+                HttpStatus: StatusCodes.Status404NotFound
+            );
+            
             #endregion
             
             // 5xx Status Codes
@@ -57,6 +69,12 @@ public static partial class BusinessMessageConstants
             public static readonly BusinessMessage RemoveFailed = new(
                 Message: "FTP üzerinde dosya silinmeye çalışılırken bir hata meydana geldi.",
                 Code: "FTP50001",
+                HttpStatus: StatusCodes.Status500InternalServerError
+            );
+            
+            public static readonly BusinessMessage RemoveDirectoryFailed = new(
+                Message: "FTP üzerinde dosya yolu silinmeye çalışılırken bir hata meydana geldi.",
+                Code: "FTP50002",
                 HttpStatus: StatusCodes.Status500InternalServerError
             );
             

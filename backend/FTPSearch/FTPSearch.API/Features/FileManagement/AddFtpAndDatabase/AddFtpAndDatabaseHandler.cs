@@ -96,7 +96,7 @@ public class AddFtpAndDatabaseCommandHandler(IFtpService ftpService,
         foreach (var directory in createdDirectories)
         {
             var fileParentDirectory = string.Join('/',
-                directory.Split(new[] { '/' },
+                directory.Split(['/'],
                         StringSplitOptions.RemoveEmptyEntries)
                     .Reverse()
                     .Skip(1)

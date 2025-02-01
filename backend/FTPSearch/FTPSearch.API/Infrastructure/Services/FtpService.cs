@@ -100,4 +100,29 @@ public partial class FtpService(IOptions<FtpConfiguration> ftpConfiguration) : I
         
         return Result<FtpStatus>.Success(FtpStatus.Success, BusinessMessageConstants.Success.Ftp.Removed);
     }
+
+    public async Task<Result<FtpStatus>> DeleteDirectoryAsync(string directory, CancellationToken cancellationToken)
+    {
+        await using AsyncFtpClient ftpClient = new(_ftpConfiguration.Host, 
+            _ftpConfiguration.Username,
+            _ftpConfiguration.Password,
+            _ftpConfiguration.Port);
+
+        await ftpClient.Connect(cancellationToken);
+        
+        var isExistDirectory = await ftpClient.DirectoryExists(directory, cancellationToken);
+        if(!isExistDirectory)
+            return Result<FtpStatus>.Error(BusinessMessageConstants.Error.Ftp.NotFoundDirectory);
+
+        try
+        {
+            await ftpClient.DeleteDirectory(directory, cancellationToken);
+        }
+        catch (Exception)
+        {
+            return Result<FtpStatus>.Error(BusinessMessageConstants.Error.Ftp.RemoveDirectoryFailed);
+        }
+        
+        return Result<FtpStatus>.Success(FtpStatus.Success, BusinessMessageConstants.Success.Ftp.RemovedDirectory);
+    }
 }

@@ -18,4 +18,7 @@ public interface IFtpService
 
     Task<Result<FtpStatus>> DeleteFileAsync(string filePath,
         CancellationToken cancellationToken);
+    
+    Task<Result<FtpStatus>> DeleteDirectoryAsync(string directory,
+        CancellationToken cancellationToken);
 }
