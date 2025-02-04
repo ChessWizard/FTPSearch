@@ -18,6 +18,7 @@ public class GetAllFromDirectoryQueryHandler(FTPSearchDbContext dbContext) : IRe
     public async Task<PagingResult<List<FileResponse>>> Handle(GetAllFromDirectoryQuery request, CancellationToken cancellationToken)
     {
         var query = dbContext.Files
+            .AsNoTracking()
             .Where(file => file.Path == request.Directory)
             .AsQueryable();
         

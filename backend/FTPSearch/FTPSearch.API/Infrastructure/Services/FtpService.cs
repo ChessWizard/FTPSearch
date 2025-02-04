@@ -75,4 +75,76 @@ public partial class FtpService(IOptions<FtpConfiguration> ftpConfiguration) : I
         
         return Result<List<string>>.Success(createdDirectories, BusinessMessageConstants.Success.Ftp.Added);
     }
+
+    public async Task<Result<FtpStatus>> DeleteFileAsync(string filePath,
+        CancellationToken cancellationToken)
+    {
+        await using AsyncFtpClient ftpClient = new(_ftpConfiguration.Host, 
+            _ftpConfiguration.Username,
+            _ftpConfiguration.Password,
+            _ftpConfiguration.Port);
+
+        await ftpClient.Connect(cancellationToken);
+
+        var isExistFile = await ftpClient.FileExists(filePath, cancellationToken);
+        if(!isExistFile)
+            return Result<FtpStatus>.Error(BusinessMessageConstants.Error.Ftp.NotFound);
+        
+        try
+        {
+            await ftpClient.DeleteFile(filePath, cancellationToken);
+        }
+        catch (Exception)
+        {
+            return Result<FtpStatus>.Error(BusinessMessageConstants.Error.Ftp.RemoveFailed);
+        }
+        
+        return Result<FtpStatus>.Success(FtpStatus.Success, BusinessMessageConstants.Success.Ftp.Removed);
+    }
+
+    public async Task<Result<FtpStatus>> DeleteDirectoryAsync(string directory, CancellationToken cancellationToken)
+    {
+        await using AsyncFtpClient ftpClient = new(_ftpConfiguration.Host, 
+            _ftpConfiguration.Username,
+            _ftpConfiguration.Password,
+            _ftpConfiguration.Port);
+
+        await ftpClient.Connect(cancellationToken);
+        
+        var isExistDirectory = await ftpClient.DirectoryExists(directory, cancellationToken);
+        if(!isExistDirectory)
+            return Result<FtpStatus>.Error(BusinessMessageConstants.Error.Ftp.NotFoundDirectory);
+
+        try
+        {
+            await ftpClient.DeleteDirectory(directory, cancellationToken);
+        }
+        catch (Exception)
+        {
+            return Result<FtpStatus>.Error(BusinessMessageConstants.Error.Ftp.RemoveDirectoryFailed);
+        }
+        
+        return Result<FtpStatus>.Success(FtpStatus.Success, BusinessMessageConstants.Success.Ftp.RemovedDirectory);
+    }
+
+    public async Task<Result<MemoryStream>> DownloadFileAsync(string filePath, CancellationToken cancellationToken)
+    {
+        await using AsyncFtpClient ftpClient = new(_ftpConfiguration.Host, 
+            _ftpConfiguration.Username,
+            _ftpConfiguration.Password,
+            _ftpConfiguration.Port);
+
+        await ftpClient.Connect(cancellationToken);
+
+        var isExistFile = await ftpClient.FileExists(filePath, cancellationToken);
+        if(!isExistFile)
+            return Result<MemoryStream>.Error(BusinessMessageConstants.Error.Ftp.NotFound);
+        
+        MemoryStream memoryStream = new();
+        
+        await ftpClient.DownloadStream(memoryStream, filePath, token: cancellationToken);
+        
+        memoryStream.Position = 0;
+        return Result<MemoryStream>.Success(memoryStream, BusinessMessageConstants.Success.Ftp.Downloaded);
+    }
 }
