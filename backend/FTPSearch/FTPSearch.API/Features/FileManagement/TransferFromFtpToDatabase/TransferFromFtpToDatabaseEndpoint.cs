@@ -3,15 +3,16 @@ using FTPSearch.API.Application.Extensions;
 using MediatR;
 
 namespace FTPSearch.API.Features.FileManagement.TransferFromFtpToDatabase;
-
+public record GetAllFromDirectoryRequest(int SiteId);
 public class TransferFromFtpToDatabaseEndpoint : ICarterModule
 {
     public void AddRoutes(IEndpointRouteBuilder app)
     {
         app.MapPost(pattern: "/FileManagements",
-                handler: async (ISender sender) =>
+                handler: async (GetAllFromDirectoryRequest request, ISender sender) =>
                 {
-                    var result = await sender.Send(new TransferFromFtpToDatabaseCommand());
+                    
+                    var result = await sender.Send(new TransferFromFtpToDatabaseCommand(request.SiteId));
                     return result.FromResult();
                 }).WithName("Transfer Files From Ftp to Database")
             .WithTags("FileManagements")

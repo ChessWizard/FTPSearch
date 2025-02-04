@@ -1,10 +1,8 @@
-using FTPSearch.API.Domain.Entities.Base;
-using FTPSearch.API.Domain.Entities.Base.Interfaces;
 using FTPSearch.API.Domain.Enums;
 
-namespace FTPSearch.API.Domain.Entities;
+namespace FTPSearch.API.Domain.Entities.Base;
 
-public class FileEntity : AuditEntity<Guid>
+public class TempFiles: AuditEntity<Guid>
 {
     public string Name { get; set; }
 
