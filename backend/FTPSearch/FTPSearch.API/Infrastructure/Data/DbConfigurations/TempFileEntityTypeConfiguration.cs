@@ -1,23 +1,24 @@
 using FTPSearch.API.Domain.Entities;
+using FTPSearch.API.Domain.Entities.Base;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace FTPSearch.API.Infrastructure.Data.DbConfigurations;
 
-public class FileEntityTypeConfiguration : AuditEntityTypeConfiguration<FileEntity>
+public class TempFileEntityTypeConfiguration : AuditEntityTypeConfiguration<TempFiles>
 {
-    public override void Configure(EntityTypeBuilder<FileEntity> builder)
+    public override void Configure(EntityTypeBuilder<TempFiles> builder)
     {
-        builder.ToTable("Files");
+        builder.ToTable("TempFiles");
         
         builder.HasKey(file => file.Id);
         
         builder.HasIndex(e => e.Path)
-            .HasDatabaseName("IX_FileEntity_Path");
+            .HasDatabaseName("IX_TempFiles_Path");
         
-        builder.HasIndex(e => new { e.Name, e.Path, e.SiteId })
+        builder.HasIndex(e => new { e.Name, e.Path, e.SiteId})
             .IsUnique()
-            .HasDatabaseName("IX_FileEntity_Name_Path");
+            .HasDatabaseName("IX_TempFiles_Name_Path");
 
         builder.Property(file => file.Name)
             .IsRequired()
@@ -36,11 +37,6 @@ public class FileEntityTypeConfiguration : AuditEntityTypeConfiguration<FileEnti
             
         builder.Property(file => file.SiteId)
             .IsRequired();
-
-        builder.HasIndex(file => file.Name)
-            .HasDatabaseName("IX_FileEntity_Name_GIN")
-            .HasMethod("GIN")
-            .HasAnnotation("Npgsql:TsVectorConfig", "english");
         
         base.Configure(builder);
     }

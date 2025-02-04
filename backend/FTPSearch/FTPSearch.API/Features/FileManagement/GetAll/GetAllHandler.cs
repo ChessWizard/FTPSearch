@@ -11,7 +11,7 @@ public class GetAllQueryHandler(IFtpService ftpService) : IRequestHandler<GetAll
 {
     public async Task<Result<List<FileResponse>>> Handle(GetAllQuery query, CancellationToken cancellationToken)
     {
-        var response = await ftpService.GetAllAsync(cancellationToken);
+        var response = await ftpService.GetAllAsync(1, cancellationToken);
         return response;
     }
 }

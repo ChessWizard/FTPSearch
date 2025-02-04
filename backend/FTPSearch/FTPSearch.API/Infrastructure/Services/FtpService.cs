@@ -12,7 +12,7 @@ public partial class FtpService(IOptions<FtpConfiguration> ftpConfiguration) : I
 {
     private readonly FtpConfiguration _ftpConfiguration = ftpConfiguration.Value;
 
-    public async Task<Result<List<FileResponse>>> GetAllAsync(CancellationToken cancellationToken)
+    public async Task<Result<List<FileResponse>>> GetAllAsync(int siteId, CancellationToken cancellationToken)
     {
         await using AsyncFtpClient ftpClient = new(_ftpConfiguration.Host, 
             _ftpConfiguration.Username,
@@ -31,7 +31,8 @@ public partial class FtpService(IOptions<FtpConfiguration> ftpConfiguration) : I
                 file.Name, 
                  Path.GetDirectoryName(file.FullName!)!.TrimStart('/'), 
                 $"{_ftpConfiguration.Host}/{file.FullName.TrimStart('/')}",
-                GetFileMetaType(file.Type)
+                GetFileMetaType(file.Type),
+                siteId
             ))
             .ToList();
         

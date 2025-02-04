@@ -7,7 +7,7 @@ namespace FTPSearch.API.Application.Services;
 
 public interface IFtpService
 {
-    Task<Result<List<FileResponse>>> GetAllAsync(CancellationToken cancellationToken);
+    Task<Result<List<FileResponse>>> GetAllAsync(int siteId,CancellationToken cancellationToken);
 
     Task<Result<(FtpStatus FtpStatus, List<string> Directories)>> AddFileAsync(IFormFile file, 
         string directory, 
